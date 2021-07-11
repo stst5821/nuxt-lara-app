@@ -1,4 +1,8 @@
+const environment = process.env.NODE_ENV || 'development'
+const envSet = require(`./env.${environment}.js`)
+
 export default {
+  env: envSet,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'nuxt-lara-app',
