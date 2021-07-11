@@ -8,7 +8,7 @@
     "build:prod": "cross-env NODE_ENV=\"production\" nuxt build",
     "start": "nuxt start",
     "start:prod": "cross-env NODE_ENV=\"production\" nuxt start",
-    "generate": "nuxt generate",
+    "generate": "cross-env NODE_ENV=\"production\" nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
     "test": "jest"
