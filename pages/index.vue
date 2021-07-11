@@ -65,9 +65,6 @@ export default {
     }
   },
   mounted() {
-    if (process.env.production === 'production') {
-      axios.get(apiBaseUrl + '/test1')
-    }
     axios
       .get('http://localhost/api/test1')
       .then((response) => {
