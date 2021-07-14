@@ -68,7 +68,6 @@ export default {
   },
   data() {
     return {
-      results: '',
       id: '',
       name: '',
       body: '',
@@ -78,11 +77,24 @@ export default {
     // laravelのPostControllerのstoreにデータを送る。
     submit() {
       // DBへの登録が完了したら、getでDBからデータを取ってきて追加したデータを画面に表示させる。
-      axios.post(process.env.baseUrl + 'api/update', {
-        id: this.result_id,
-        name: this.name,
-        body: this.body,
-      })
+      axios
+        .post(process.env.baseUrl + 'api/update', {
+          id: this.result_id,
+          name: this.name,
+          body: this.body,
+        })
+        .then(() => {
+          const id = this.result_id
+          console.log(id)
+          axios.get(process.env.baseUrl + `api/edit/${id}`).then((response) => {
+            return {
+              id: response.data.result.result_id,
+              name: response.data.result.name,
+              body: response.data.result.body,
+            }
+          })
+          console.log(id)
+        })
     },
   },
 }
