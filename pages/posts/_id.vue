@@ -1,6 +1,7 @@
 <template>
   <div>
-    id:{{ results.id }} | name:{{ results.name }} | 本文:{{ results.body }}
+    <p>編集画面</p>
+    id:{{ results.id }}
 
     <form @submit.prevent>
       <input
@@ -45,7 +46,7 @@
         type="submit"
         @click="submit"
       >
-        送信
+        編集完了
       </button>
     </form>
   </div>
@@ -59,6 +60,7 @@ export default {
     const res = await context.$axios.$get(
       process.env.baseUrl + `api/edit/${context.params.id}`
     )
+
     return {
       results: res.result,
     }
@@ -83,11 +85,6 @@ export default {
         .then(() => {
           axios.get(process.env.baseUrl + `api/edit/68`).then((response) => {
             this.result = response.data.result
-            console.log(response.data)
-
-            return {
-              results: this.result,
-            }
           })
         })
     },
