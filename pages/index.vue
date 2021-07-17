@@ -119,6 +119,7 @@ export default {
         this.Validation.body_result = ''
       }
     },
+    // メールフォームを追加予定のため残しておく
     checkString(inputdata) {
       const regex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
       return regex.test(inputdata)
