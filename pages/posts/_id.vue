@@ -1,10 +1,11 @@
 <template>
   <div>
-    id:{{ result_id }} | name:{{ result_name }} | 本文:{{ result_body }}
+    <p>編集画面</p>
+    id:{{ results.id }}
 
     <form @submit.prevent>
       <input
-        v-model="result_id"
+        v-model="results.id"
         placeholder="入力ください"
         type="hidden"
         name="entry"
@@ -14,7 +15,7 @@
       <label
         >名前：
         <input
-          v-model="name"
+          v-model="results.name"
           placeholder="入力ください"
           type="text"
           name="entry"
@@ -25,7 +26,7 @@
       <label
         >本文：
         <input
-          v-model="body"
+          v-model="results.body"
           placeholder="入力ください"
           type="text"
           name="entry"
@@ -45,7 +46,7 @@
         type="submit"
         @click="submit"
       >
-        送信
+        編集完了
       </button>
     </form>
   </div>
@@ -59,11 +60,9 @@ export default {
     const res = await context.$axios.$get(
       process.env.baseUrl + `api/edit/${context.params.id}`
     )
-    console.log(res)
+
     return {
-      result_id: res.result.id,
-      result_name: res.result.name,
-      result_body: res.result.body,
+      results: res.result,
     }
   },
   data() {
@@ -79,21 +78,14 @@ export default {
       // DBへの登録が完了したら、getでDBからデータを取ってきて追加したデータを画面に表示させる。
       axios
         .post(process.env.baseUrl + 'api/update', {
-          id: this.result_id,
-          name: this.name,
-          body: this.body,
+          id: this.results.id,
+          name: this.results.name,
+          body: this.results.body,
         })
         .then(() => {
-          const id = this.result_id
-          console.log(id)
-          axios.get(process.env.baseUrl + `api/edit/${id}`).then((response) => {
-            return {
-              id: response.data.result.result_id,
-              name: response.data.result.name,
-              body: response.data.result.body,
-            }
+          axios.get(process.env.baseUrl + `api/edit/68`).then((response) => {
+            this.result = response.data.result
           })
-          console.log(id)
         })
     },
   },

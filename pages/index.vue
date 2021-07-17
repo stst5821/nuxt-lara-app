@@ -53,8 +53,9 @@
 import axios from 'axios'
 
 export default {
-  async asyncData(context) {
-    const res = await context.$axios.$get(process.env.baseUrl + `api/test1/`)
+  async asyncData({ $axios }) {
+    const res = await $axios.$get(process.env.baseUrl + `api/test1/`)
+    console.log(res)
     return {
       results: res.result,
     }
