@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 名前・本文投稿フォーム -->
     <form @submit.prevent>
       <label
         >名前：
@@ -38,6 +39,13 @@
         送信
       </button>
     </form>
+
+    <!-- バリデーション結果 -->
+    <p class="text-red-500 font-bold">{{ Validation.name_result }}</p>
+    <p class="text-red-500 font-bold">{{ Validation.body_result }}</p>
+
+    <!-- 投稿一覧 -->
+    <hr class="my-4" />
     <ul>
       <li v-for="result in results" :key="result.id">
         id:
@@ -55,7 +63,6 @@ import axios from 'axios'
 export default {
   async asyncData({ $axios }) {
     const res = await $axios.$get(process.env.baseUrl + `api/test1/`)
-    console.log(res)
     return {
       results: res.result,
     }
@@ -65,31 +72,64 @@ export default {
       results: '',
       name: '',
       body: '',
+      Validation: {
+        name_result: '',
+        body_result: '',
+      },
     }
   },
   methods: {
     // laravelのPostControllerのstoreにデータを送る。
     submit() {
-      // DBへの登録が完了したら、getでDBからデータを取ってきて追加したデータを画面に表示させる。
-      axios
-        .post(process.env.baseUrl + `api/store`, {
-          name: this.name,
-          body: this.body,
-        })
-        .then(() => {
-          axios.get(process.env.baseUrl + `api/test1`).then((response) => {
-            this.results = response.data.result
-            console.log(this.results)
+      let nameBool = false
+      let bodyBool = false
+
+      console.log(this.name)
+      if (!this.name) {
+        this.Validation.name_result = '名前を入力してください'
+      } else {
+        nameBool = true
+        this.Validation.name_result = ''
+      }
+
+      if (!this.body) {
+        this.Validation.body_result = '本文を入力してください'
+      } else {
+        bodyBool = true
+        this.Validation.body_result = ''
+      }
+
+      if (nameBool === true && bodyBool === true) {
+        // DBへの登録が完了したら、getでDBからデータを取ってきて追加したデータを画面に表示させる。
+        axios
+          .post(process.env.baseUrl + `api/store`, {
+            name: this.name,
+            body: this.body,
           })
-        })
+          .then(() => {
+            axios.get(process.env.baseUrl + `api/test1`).then((response) => {
+              this.results = response.data.result
+            })
+          })
+        this.Validation.result = '送信に成功しました！'
+        console.log(this.name)
+        this.name = ''
+        this.body = ''
+        this.Validation.name_result = ''
+        this.Validation.body_result = ''
+      }
     },
-    remove(id) {
-      axios.post(process.env.baseUrl + `api/delete`, { id }).then(() => {
-        axios.get(process.env.baseUrl + `api/test1`).then((response) => {
-          this.results = response.data.result
-        })
+    checkString(inputdata) {
+      const regex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+      return regex.test(inputdata)
+    },
+  },
+  remove(id) {
+    axios.post(process.env.baseUrl + `api/delete`, { id }).then(() => {
+      axios.get(process.env.baseUrl + `api/test1`).then((response) => {
+        this.results = response.data.result
       })
-    },
+    })
   },
 }
 </script>
