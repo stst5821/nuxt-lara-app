@@ -63,6 +63,7 @@ import axios from 'axios'
 export default {
   async asyncData({ $axios }) {
     const res = await $axios.$get(process.env.baseUrl + `api/index/`)
+    console.log(res)
     return {
       results: res,
     }
@@ -119,18 +120,18 @@ export default {
         this.Validation.body_result = ''
       }
     },
+    remove(id) {
+      axios.post(process.env.baseUrl + `api/delete`, { id }).then(() => {
+        axios.get(process.env.baseUrl + `api/index`).then((response) => {
+          this.results = response.data
+        })
+      })
+    },
     // メールフォームを追加予定のため残しておく
     checkString(inputdata) {
       const regex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
       return regex.test(inputdata)
     },
-  },
-  remove(id) {
-    axios.post(process.env.baseUrl + `api/delete`, { id }).then(() => {
-      axios.get(process.env.baseUrl + `api/test1`).then((response) => {
-        this.results = response.data.result
-      })
-    })
   },
 }
 </script>
