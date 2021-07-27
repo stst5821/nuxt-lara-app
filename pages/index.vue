@@ -62,9 +62,9 @@ import axios from 'axios'
 
 export default {
   async asyncData({ $axios }) {
-    const res = await $axios.$get(process.env.baseUrl + `api/test1/`)
+    const res = await $axios.$get(process.env.baseUrl + `api/index/`)
     return {
-      results: res.result,
+      results: res,
     }
   },
   data() {
@@ -107,7 +107,7 @@ export default {
             body: this.body,
           })
           .then(() => {
-            axios.get(process.env.baseUrl + `api/test1`).then((response) => {
+            axios.get(process.env.baseUrl + `api/index`).then((response) => {
               this.results = response.data.result
             })
           })

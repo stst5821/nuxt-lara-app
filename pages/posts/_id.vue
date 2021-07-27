@@ -65,7 +65,7 @@ export default {
     )
 
     return {
-      results: res.result,
+      results: res,
     }
   },
   data() {
